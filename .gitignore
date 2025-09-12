@@ -1,0 +1,17 @@
+# IDE stuff
+.vscode/
+
+# build targets
+build/
+target/
+.venv/
+out/
+
+# python cache
+__pycache__/
+*.py[cod]
+
+
+# version control
+*.lock
+.python-version
