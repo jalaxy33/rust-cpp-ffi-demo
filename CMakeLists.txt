@@ -38,7 +38,7 @@ endif()
 # Executable Target Configuration
 # =============================================================================
 set(targetname call-rust)
-add_executable(${targetname} src/call_rust.cpp)
+add_executable(${targetname} src/rust_to_cpp/call_rust.cpp)
 target_include_directories(${targetname} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 
