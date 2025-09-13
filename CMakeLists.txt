@@ -18,10 +18,19 @@ message(STATUS "Rust lib name: ${RUST_LIB_NAME}")
 message(STATUS "Rust lib dir: ${RUST_LIB_DIR}")
 
 
-if (EXISTS ${RUST_LIB_DIR})
-    message(STATUS "Rust lib dir exists")
+if (WIN32)
+    set(RUST_LIB_PATH "${RUST_LIB_DIR}/${RUST_LIB_NAME}.dll")
+elseif(APPLE)
+    set(RUST_LIB_PATH "${RUST_LIB_DIR}/lib${RUST_LIB_NAME}.dylib")
 else()
-    message(WARNING "Rust lib dir does not exist: ${RUST_LIB_DIR}. Building...")
+    set(RUST_LIB_PATH "${RUST_LIB_DIR}/lib${RUST_LIB_NAME}.so")
+endif()
+
+
+if (EXISTS ${RUST_LIB_PATH})
+    message(STATUS "Rust lib exists")
+else()
+    message(WARNING "Rust lib does not exist: ${RUST_LIB_PATH}. Building...")
 
     # if the target directory does not exist, attempt to build the Rust library
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -49,19 +58,19 @@ target_include_directories(${targetname} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 # link the Rust shared library
 if(WIN32) 
     # NOTE: On Windows, there are two types of libraries: the import library (.dll.lib) and the runtime library (.dll)
-    target_link_libraries(${targetname} PRIVATE "${RUST_LIB_DIR}/${RUST_LIB_NAME}.dll.lib")
+    target_link_libraries(${targetname} PRIVATE "${RUST_LIB_PATH}.lib")
 
     # Copy DLL to output directory on Windows
     add_custom_command(TARGET ${targetname} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${RUST_LIB_DIR}/${RUST_LIB_NAME}.dll"
+        "${RUST_LIB_PATH}"
         $<TARGET_FILE_DIR:${targetname}>
         COMMENT "Copying ${RUST_LIB_NAME}.dll to output directory"
     )
 elseif(APPLE)
-    target_link_libraries(${targetname} PRIVATE "${RUST_LIB_DIR}/lib${RUST_LIB_NAME}.dylib")
+    target_link_libraries(${targetname} PRIVATE "${RUST_LIB_PATH}")
 else()
-    target_link_libraries(${targetname} PRIVATE "${RUST_LIB_DIR}/lib${RUST_LIB_NAME}.so")
+    target_link_libraries(${targetname} PRIVATE "${RUST_LIB_PATH}")
 endif()
 
 # =============================================================================
@@ -112,13 +121,13 @@ install(TARGETS ${targetname}
 
 # install Rust shared library
 if(WIN32)
-    install(FILES "${RUST_LIB_DIR}/${RUST_LIB_NAME}.dll" 
+    install(FILES "${RUST_LIB_PATH}" 
             DESTINATION bin)
 elseif(APPLE)
-    install(FILES "${RUST_LIB_DIR}/lib${RUST_LIB_NAME}.dylib" 
+    install(FILES "${RUST_LIB_PATH}" 
             DESTINATION lib)
 else()
-    install(FILES "${RUST_LIB_DIR}/lib${RUST_LIB_NAME}.so" 
+    install(FILES "${RUST_LIB_PATH}" 
             DESTINATION lib)
 endif() 
 
