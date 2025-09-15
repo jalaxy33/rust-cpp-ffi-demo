@@ -7,13 +7,12 @@
 #include <ostream>
 #include <new>
 
-extern "C"
-{
+extern "C" {
 
-    void say_hello();
+void say_hello();
 
-    int32_t add(int32_t a, int32_t b);
+int32_t add(int32_t a, int32_t b);
 
-    void call_inner_function();
+void call_inner_function();
 
-} // extern "C"
+}  // extern "C"
