@@ -7,9 +7,15 @@ edition = "2024"
 [lib]
 crate-type = ["rlib", "cdylib"]
 
+[[bin]]
+name = "cpp-to-rust"
+path = "src/cpp_to_rust/main.rs"
+
 
 [build-dependencies]
 cbindgen = "0.29.0"
+cxx-build = { version = "1.0.184", features = ["parallel"] }
 
 
 [dependencies]
+cxx = "1.0.184"
