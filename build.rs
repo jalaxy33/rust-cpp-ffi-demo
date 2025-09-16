@@ -14,7 +14,7 @@ fn main() {
         .write_to_file(crate_path.join("include/rust_to_cpp.h"));
 
     println!("cargo:rerun-if-changed=src/lib.rs");
-    println!("cargo:rerun-if-changed=src/to_cpp.rs");
+    println!("cargo:rerun-if-changed=src/rust_to_cpp.rs");
     println!("cargo:rerun-if-changed=src/call_cpp.rs");
 
     // C++ to Rust
