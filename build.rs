@@ -18,12 +18,12 @@ fn main() {
     println!("cargo:rerun-if-changed=src/call_cpp.rs");
 
     // C++ to Rust
-    cxx_build::bridge("src/cpp_to_rust/call_cpp.rs")
-        .file("src/cpp_to_rust/to_rust.cpp")
+    cxx_build::bridge("src/call_cpp.rs")
+        .file("src/cpp/to_rust.cpp")
         .include("include")
         .std("c++17")
         .compile("cpp-to-rust");
 
-    println!("cargo:rerun-if-changed=src/cpp_to_rust/to_rust.cpp");
+    println!("cargo:rerun-if-changed=src/cpp/to_rust.cpp");
     println!("cargo:rerun-if-changed=include/cpp_to_rust.h");
 }

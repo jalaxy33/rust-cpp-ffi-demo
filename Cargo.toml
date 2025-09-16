@@ -9,7 +9,7 @@ crate-type = ["rlib", "cdylib"]
 
 [[bin]]
 name = "cpp-to-rust"
-path = "src/cpp_to_rust/main.rs"
+path = "src/main.rs"
 
 
 [build-dependencies]

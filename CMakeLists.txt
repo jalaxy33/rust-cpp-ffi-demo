@@ -14,9 +14,6 @@ else()
     message(STATUS "Release build")
 endif()
 
-message(STATUS "Rust lib name: ${RUST_LIB_NAME}")
-message(STATUS "Rust lib dir: ${RUST_LIB_DIR}")
-
 
 if (WIN32)
     set(RUST_LIB_PATH "${RUST_LIB_DIR}/${RUST_LIB_NAME}.dll")
@@ -30,24 +27,14 @@ endif()
 if (EXISTS ${RUST_LIB_PATH})
     message(STATUS "Rust lib exists")
 else()
-    message(WARNING "Rust lib does not exist: ${RUST_LIB_PATH}. Building...")
-
-    # if the target directory does not exist, attempt to build the Rust library
-    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-        execute_process(COMMAND cargo build
-                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-    else()
-        execute_process(COMMAND cargo build --release
-                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-    endif()
-
+    message(FATAL_ERROR "Rust lib does not exist: ${RUST_LIB_PATH}. Please build the Rust library first.")
 endif()
 
 # =============================================================================
 # Executable Target Configuration
 # =============================================================================
 set(targetname call-rust)
-add_executable(${targetname} src/rust_to_cpp/call_rust.cpp)
+add_executable(${targetname} src/cpp/call_rust.cpp)
 target_include_directories(${targetname} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 
@@ -62,7 +49,7 @@ if(WIN32)
 
     # Copy DLL to output directory on Windows
     add_custom_command(TARGET ${targetname} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        COMMAND ${CMAKE_COMMAND} -E copy
         "${RUST_LIB_PATH}"
         $<TARGET_FILE_DIR:${targetname}>
         COMMENT "Copying ${RUST_LIB_NAME}.dll to output directory"

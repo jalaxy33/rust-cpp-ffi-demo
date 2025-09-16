@@ -8,40 +8,47 @@ This project shows how to call C++ functions from Rust and vice versa using FFI 
 
 ## Prerequisites
 
-- Rust (latest stable version)
+- [Rust toolchain](https://www.rust-lang.org/tools/install)
 - C++ compiler (GCC/Clang/MSVC)
-- CMake (optional)
+- [CMake](https://cmake.org/download/)
 
 ## Building
 
+**1. Build Rust**
+
 ```bash
-# Build the project
-cargo build
+# debug build
+cargo b
 
-# Run tests
-cargo test
-
-# Run the demo
-cargo run
+# release build
+cargo b -r
 ```
 
-## Project Structure
+**2. Build C++** (Maybe not right)
+
+```bash
+# debug build
+cmake --build build --target ALL_BUILD
+
+# release build
+cmake --build build --target ALL_BUILD --config Release
+```
+
+## Running
+
+**1. C++ call Rust**
+```bash
+# windows
+./build/Debug/call-rust.exe
+./build/Release/call-rust.exe
+
+# unix
+./build/Debug/call-rust
+./build/Release/call-rust
 
 ```
-├── src/
-│   ├── lib.rs          # Rust FFI bindings
-│   └── main.rs         # Main application
-├── cpp/
-│   └── math.cpp        # C++ implementation
-└── build.rs            # Build script
+
+**2. Rust call C++**
+```bash
+cargo r --bin cpp-to-rust
 ```
-
-> **Note**: This project structure may change in future updates.
-
-## Usage
-
-The demo showcases basic FFI operations between Rust and C++.
-
-## License
-
-MIT License
